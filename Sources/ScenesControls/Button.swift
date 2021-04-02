@@ -61,21 +61,21 @@ public class Button : TextLabel {
 
         // Render button if size is known
         if let rect = currentRect() {
-            let backgroundFillStyle = isMouseOver ? controlStyle.backgroundHoverFillStyle : controlStyle.backgroundFillStyle
-            let roundingRadius = Int(controlStyle.roundingPercentage * Double(min(rect.size.width, rect.size.height)))
+            let backgroundFillStyle = isMouseOver ? controlStyle._backgroundHoverFillStyle : controlStyle._backgroundFillStyle
+            let roundingRadius = Int(controlStyle._roundingPercentage * Double(min(rect.size.width, rect.size.height)))
             let path = Path(rect:rect, radius:roundingRadius, fillMode:.fillAndStroke)
             text.location = rect.center
-            canvas.render(controlStyle.foregroundStrokeStyle, backgroundFillStyle, path)
-            canvas.render(controlStyle.textStrokeStyle, controlStyle.textFillStyle, text)
+            canvas.render(controlStyle._foregroundStrokeStyle, backgroundFillStyle, path)
+            canvas.render(controlStyle._textStrokeStyle, controlStyle._textFillStyle, text)
         }
 
         // Update cursor style if required
-        if isMouseOver && (cursorStyle != controlStyle.hoverCursorStyle) {
-            cursorStyle = controlStyle.hoverCursorStyle
+        if isMouseOver && (cursorStyle != controlStyle._hoverCursorStyle) {
+            cursorStyle = controlStyle._hoverCursorStyle
             canvas.render(CursorStyle(style: cursorStyle))
         }
-        if !isMouseOver && (cursorStyle != controlStyle.normalCursorStyle) {
-            cursorStyle = controlStyle.normalCursorStyle
+        if !isMouseOver && (cursorStyle != controlStyle._normalCursorStyle) {
+            cursorStyle = controlStyle._normalCursorStyle
             canvas.render(CursorStyle(style: cursorStyle))
         }
         

@@ -50,8 +50,8 @@ public class TextLabel : Control {
         // Create the text object
         // The alignment and baseline are always centered so the text is in the
         // center of the button
-        text = Text(location: topLeft, text: labelString, fillMode:controlStyle.textFillMode)
-        text.font = controlStyle.font
+        text = Text(location: topLeft, text: labelString, fillMode:controlStyle._textFillMode)
+        text.font = controlStyle._font
         text.alignment = .center
         text.baseline = .middle
 
@@ -116,7 +116,7 @@ public class TextLabel : Control {
     open func calculateRect() -> Rect? {
         if let metrics = textMetric.currentMetrics {
             var rect = metrics.actualBoundingBox()
-            rect.inflate(by: controlStyle.padding)
+            rect.inflate(by: controlStyle._padding)
             rect.topLeft = topLeft
             return rect
         } else {
@@ -169,11 +169,11 @@ public class TextLabel : Control {
         // Render label if size is known
         if let rect = currentRect() {
             let rectangle = Rectangle(rect:rect, fillMode:.fillAndStroke)
-            if controlStyle.labelsDisplayEnclosingRect {
-                canvas.render(controlStyle.foregroundStrokeStyle, controlStyle.backgroundFillStyle, rectangle)
+            if controlStyle._labelsDisplayEnclosingRect {
+                canvas.render(controlStyle._foregroundStrokeStyle, controlStyle._backgroundFillStyle, rectangle)
             }
             text.location = rect.center
-            canvas.render(controlStyle.textStrokeStyle, controlStyle.textFillStyle, text)
+            canvas.render(controlStyle._textStrokeStyle, controlStyle._textFillStyle, text)
         }
         
     }

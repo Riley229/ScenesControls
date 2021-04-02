@@ -31,7 +31,7 @@ public class Panel : RenderableEntityContainer {
     }
     
     /// Stores the controlStyle to used for this control
-    public let controlStyle : ControlStyle
+    public private(set) var controlStyle : ControlStyle
 
     /// Specifies the layoutStyle to be used for this panel
     public var layoutStyle : LayoutStyle {
@@ -49,6 +49,8 @@ public class Panel : RenderableEntityContainer {
         self.controlStyle = controlStyle
         super.init(name:name, 
                    topLeft:topLeft, fixedSize:fixedSize)
+
+        self.controlStyle.controlType = type(of:self)
     }
 
     /// Recalculates the size of this panel using the specified layout
@@ -61,23 +63,23 @@ public class Panel : RenderableEntityContainer {
 
             switch layoutStyle {
             case .uniformRow:
-                rects = Layout.apply(rule:.alignTops(top:topLeft.y + controlStyle.padding), childRects:rects)
+                rects = Layout.apply(rule:.alignTops(top:topLeft.y + controlStyle._padding), childRects:rects)
                 rects = Layout.apply(rule:.alignWidths(width:targetWidth), childRects:rects)
                 rects = Layout.apply(rule:.alignHeights(height:targetHeight), childRects:rects)
-                rects = Layout.apply(rule:.distributeHorizontally(left:topLeft.x + controlStyle.padding, padding:controlStyle.padding), childRects:rects)
+                rects = Layout.apply(rule:.distributeHorizontally(left:topLeft.x + controlStyle._padding, padding:controlStyle._padding), childRects:rects)
             case .uniformColumn:
-                rects = Layout.apply(rule:.alignLefts(left:topLeft.x + controlStyle.padding), childRects:rects)
+                rects = Layout.apply(rule:.alignLefts(left:topLeft.x + controlStyle._padding), childRects:rects)
                 rects = Layout.apply(rule:.alignWidths(width:targetWidth), childRects:rects)
                 rects = Layout.apply(rule:.alignHeights(height:targetHeight), childRects:rects)
-                rects = Layout.apply(rule:.distributeVertically(top:topLeft.y + controlStyle.padding, padding:controlStyle.padding), childRects:rects)
+                rects = Layout.apply(rule:.distributeVertically(top:topLeft.y + controlStyle._padding, padding:controlStyle._padding), childRects:rects)
             }
             
             // Apply the new rects to the entities
             childRects = rects
 
             // Set our own size
-            let width  = Layout.property(attribute:.fullWidth, childRects:rects) + controlStyle.padding * 2
-            let height = Layout.property(attribute:.fullHeight, childRects:rects) + controlStyle.padding * 2
+            let width  = Layout.property(attribute:.fullWidth, childRects:rects) + controlStyle._padding * 2
+            let height = Layout.property(attribute:.fullHeight, childRects:rects) + controlStyle._padding * 2
             currentCalculatedSize = Size(width:width, height:height)
         }
     }
@@ -109,11 +111,8 @@ public class Panel : RenderableEntityContainer {
         // Render if panel size is known
         if let rect = currentRect() {
             let rectangle = Rectangle(rect:rect, fillMode:.fillAndStroke)
-            canvas.render(controlStyle.panelStrokeStyle, controlStyle.panelFillStyle, rectangle)
+            canvas.render(controlStyle._foregroundStrokeStyle, controlStyle._backgroundFillStyle, rectangle)
         }
-        
     }
-
 }
-
 

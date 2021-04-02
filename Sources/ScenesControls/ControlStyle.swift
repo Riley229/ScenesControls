@@ -1,7 +1,7 @@
 /*
 ScenesControls provides a Swift object library with support for common
 controls.  ScenesControls runs on top of Scenes and IGIS.
-Copyright (C) 2020 Tango Golf Digital, LLC
+Copyright (C) 2020-2021 Tango Golf Digital, LLC
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -17,68 +17,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Igis
   
 /// This struct provides information for styling controls.
-/// It also provides static variables which can be used for establishing
-/// global defaults.
+/// It also provides the static theme variable which can be used
+/// for establishing global defaults.
 /// The struct is copied when used so the original may be altered
 /// prior to the next use without affecting previous controls.
 public struct ControlStyle {
+    /// The global `Theme` applied to all `ControlStyle`s.
+    public static var theme = Theme()
 
-    // Text
-    public static var defaultFont                  = "20px Arial"
-    public static var defaultTextFillMode          = FillMode.fill
-    public static var defaultTextStrokeStyle       = StrokeStyle(color:Color(.black))
-    public static var defaultTextFillStyle         = FillStyle(color:Color(.white))
+    // stores the type of its parented control (set by `Control` or `Panel`).
+    internal var controlType : Any.Type = Control.self
 
-    // Foreground and background styles
-    public static var defaultForegroundStrokeStyle    = StrokeStyle(color:Color(red:0x9F, green:0xB4, blue:0xF2))
-    public static var defaultBackgroundFillStyle      = FillStyle(color:Color(red:0x67, green:0x85, blue:0xB4))
-    public static var defaultBackgroundHoverFillStyle = FillStyle(color:Color(red:0x77, green:0x95, blue:0xD4))
-
-    // Panel foreground and background styles
-    public static var defaultPanelStrokeStyle = StrokeStyle(color:Color(.black))
-    public static var defaultPanelFillStyle   = FillStyle(color:Color(.darkslategray))
+    // Text Style
+    public var font                  : String?
+    public var textFillMode          : FillMode?
+    public var textStrokeStyle       : StrokeStyle?
+    public var textFillStyle         : FillStyle?
     
-    // Rounding percentage (0.0 is square, 0.5 is maximum)
-    public static var defaultRoundingPercentage    = 0.20
+    // Foreground and Background Style
+    public var foregroundStrokeStyle    : StrokeStyle?
+    public var backgroundFillStyle      : FillStyle?
+    public var backgroundHoverFillStyle : FillStyle?
 
+    // Rounding Percentage (0.0 is square, 0.5 is maximum)
+    public var roundingPercentage    : Double?
     // Padding (between lines and text)
-    public static var defaultPadding               = 5
+    public var padding               : Int?
 
-    // Cursor styles
-    public static var defaultNormalCursorStyle = CursorStyle.Style.defaultCursor
-    public static var defaultHoverCursorStyle  = CursorStyle.Style.pointer
+    // Cursor Style
+    public var normalCursorStyle : CursorStyle.Style?
+    public var hoverCursorStyle  : CursorStyle.Style?
 
     // Labels display enclosing rectangle
-    public static var defaultLabelsDisplayEnclosingRect   = false
+    public var labelsDisplayEnclosingRect : Bool?
 
-    // Text
-    public var font                  : String
-    public var textFillMode          : FillMode
-    public var textStrokeStyle       : StrokeStyle
-    public var textFillStyle         : FillStyle
-    
-    // Foreground and background styles
-    public var foregroundStrokeStyle    : StrokeStyle
-    public var backgroundFillStyle      : FillStyle
-    public var backgroundHoverFillStyle : FillStyle
-
-    // Panel foreground and background styles
-    public var panelStrokeStyle         : StrokeStyle
-    public var panelFillStyle           : FillStyle
-
-    // Rounding percentage (0.0 is square, 0.5 is maximum)
-    public var roundingPercentage    : Double
-
-    // Padding (between lines and text)
-    public var padding               : Int
-
-    // Cursor styles
-    public var normalCursorStyle : CursorStyle.Style
-    public var hoverCursorStyle  : CursorStyle.Style
-
-    // Labels display enclosing rectangle
-    public var labelsDisplayEnclosingRect : Bool
-    
+    /// Creates a new `ControlStyle` from the provided parameters.
     public init(font:String? = nil,
                 textFillMode:FillMode? = nil,
                 textStrokeStyle:StrokeStyle? = nil,
@@ -88,38 +61,77 @@ public struct ControlStyle {
                 backgroundFillStyle:FillStyle? = nil,
                 backgroundHoverFillStyle:FillStyle? = nil,
                 
-                panelStrokeStyle:StrokeStyle? = nil,
-                panelFillStyle:FillStyle? = nil,
-                
                 roundingPercentage:Double? = nil,
-                
                 padding:Int? = nil,
                 
                 normalCursorStyle:CursorStyle.Style? = nil,
                 hoverCursorStyle:CursorStyle.Style? = nil,
 
-                labelsDisplayEnclosingRect:Bool? = nil
-
-    ) {
-        self.font                     = font                     ?? Self.defaultFont
-        self.textFillMode             = textFillMode             ?? Self.defaultTextFillMode
-        self.textStrokeStyle          = textStrokeStyle          ?? Self.defaultTextStrokeStyle
-        self.textFillStyle            = textFillStyle            ?? Self.defaultTextFillStyle
+                labelsDisplayEnclosingRect:Bool? = nil)
+    {
+        self.font                     = font
+        self.textFillMode             = textFillMode
+        self.textStrokeStyle          = textStrokeStyle
+        self.textFillStyle            = textFillStyle
         
-        self.foregroundStrokeStyle    = foregroundStrokeStyle    ?? Self.defaultForegroundStrokeStyle
-        self.backgroundFillStyle      = backgroundFillStyle      ?? Self.defaultBackgroundFillStyle
-        self.backgroundHoverFillStyle = backgroundHoverFillStyle ?? Self.defaultBackgroundHoverFillStyle
+        self.foregroundStrokeStyle    = foregroundStrokeStyle
+        self.backgroundFillStyle      = backgroundFillStyle
+        self.backgroundHoverFillStyle = backgroundHoverFillStyle
 
-        self.panelStrokeStyle         = panelStrokeStyle         ?? Self.defaultPanelStrokeStyle
-        self.panelFillStyle           = panelFillStyle           ?? Self.defaultPanelFillStyle
-        
-        self.roundingPercentage       = roundingPercentage       ?? Self.defaultRoundingPercentage
-        
-        self.padding                  = padding                  ?? Self.defaultPadding
+        self.roundingPercentage       = roundingPercentage
+        self.padding                  = padding
 
-        self.normalCursorStyle        = normalCursorStyle        ?? Self.defaultNormalCursorStyle
-        self.hoverCursorStyle         = hoverCursorStyle         ?? Self.defaultHoverCursorStyle
+        self.normalCursorStyle        = normalCursorStyle
+        self.hoverCursorStyle         = hoverCursorStyle
 
-        self.labelsDisplayEnclosingRect = labelsDisplayEnclosingRect ?? Self.defaultLabelsDisplayEnclosingRect
+        self.labelsDisplayEnclosingRect = labelsDisplayEnclosingRect
+    }
+
+    internal var _font : String {
+        return font ?? Self.theme.font(for:controlType)
+    }
+
+    internal var _textFillMode : FillMode {
+        return textFillMode ?? Self.theme.textFillMode(for:controlType)
+    }
+
+    internal var _textStrokeStyle : StrokeStyle {
+        return textStrokeStyle ?? Self.theme.textStrokeStyle(for:controlType)
+    }
+
+    internal var _textFillStyle : FillStyle {
+        return textFillStyle ?? Self.theme.textFillStyle(for:controlType)
+    }
+
+    internal var _foregroundStrokeStyle : StrokeStyle {
+        return foregroundStrokeStyle ?? Self.theme.foregroundStrokeStyle(for:controlType)
+    }
+
+    internal var _backgroundFillStyle : FillStyle {
+        return backgroundFillStyle ?? Self.theme.backgroundFillStyle(for:controlType)
+    }
+
+    internal var _backgroundHoverFillStyle : FillStyle {
+        return backgroundHoverFillStyle ?? Self.theme.backgroundHoverFillStyle(for:controlType)
+    }
+
+    internal var _roundingPercentage : Double {
+        return roundingPercentage ?? Self.theme.roundingPercentage(for:controlType)
+    }
+
+    internal var _padding : Int {
+        return padding ?? Self.theme.padding(for:controlType)
+    }
+
+    internal var _normalCursorStyle : CursorStyle.Style {
+        return normalCursorStyle ?? Self.theme.normalCursorStyle(for:controlType)
+    }
+
+    internal var _hoverCursorStyle : CursorStyle.Style {
+        return hoverCursorStyle ?? Self.theme.hoverCursorStyle(for:controlType)
+    }
+
+    internal var _labelsDisplayEnclosingRect : Bool {
+        return labelsDisplayEnclosingRect ?? Self.theme.labelsDisplayEnclosingRect(for:controlType)
     }
 }

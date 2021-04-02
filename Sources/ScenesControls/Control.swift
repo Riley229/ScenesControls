@@ -34,7 +34,7 @@ public class Control : ContainableRenderableEntity,
     public var clickHandler : ClickHandler?
 
     /// Stores the controlStyle to used for this control
-    public let controlStyle : ControlStyle
+    public private(set) var controlStyle : ControlStyle
     
     /// Indicates if the mouse is currently over this entity
     /// Set automatically by EntityMouseEnter/EntityMouseLeave
@@ -61,9 +61,11 @@ public class Control : ContainableRenderableEntity,
                 controlStyle:ControlStyle = ControlStyle()) {
         self.clickHandler = clickHandler
         self.controlStyle = controlStyle
-        self.cursorStyle = controlStyle.normalCursorStyle
+        self.cursorStyle = controlStyle._normalCursorStyle
         super.init(name:name, 
                    topLeft:topLeft, fixedSize:fixedSize)
+
+        self.controlStyle.controlType = type(of:self)
     }
 
 
