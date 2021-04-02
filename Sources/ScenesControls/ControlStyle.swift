@@ -16,17 +16,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Igis
   
-/// This struct provides information for styling controls.
-/// It also provides the static theme variable which can be used
-/// for establishing global defaults.
-/// The struct is copied when used so the original may be altered
-/// prior to the next use without affecting previous controls.
+/// A `ControlStyle` provides information for styling controls.
+///
+/// `ControlStyle` also contains a static `theme` variable which
+/// can be used for establishing global styling defaults.
+///
+/// When accessing a `ControlStyle` property, the order of importance
+/// is as follows: This controlStyle (if specified), the theme
+/// controlStyle for this `Stylable` object (if specified), the theme
+/// default controlStyle (if specified).
 public struct ControlStyle {
     /// The global `Theme` applied to all `ControlStyle`s.
     public static var theme = Theme()
 
-    // stores the type of its parented control (set by `Control` or `Panel`).
-    internal var controlType : Any.Type = Control.self
+    // The type of its parent (set by `Stylable` object).
+    internal var type : Stylable.Type = Control.self
 
     // Text Style
     public var font                  : String?
@@ -69,69 +73,69 @@ public struct ControlStyle {
 
                 labelsDisplayEnclosingRect:Bool? = nil)
     {
-        self.font                     = font
-        self.textFillMode             = textFillMode
-        self.textStrokeStyle          = textStrokeStyle
-        self.textFillStyle            = textFillStyle
+        self.font                       = font
+        self.textFillMode               = textFillMode
+        self.textStrokeStyle            = textStrokeStyle
+        self.textFillStyle              = textFillStyle
         
-        self.foregroundStrokeStyle    = foregroundStrokeStyle
-        self.backgroundFillStyle      = backgroundFillStyle
-        self.backgroundHoverFillStyle = backgroundHoverFillStyle
+        self.foregroundStrokeStyle      = foregroundStrokeStyle
+        self.backgroundFillStyle        = backgroundFillStyle
+        self.backgroundHoverFillStyle   = backgroundHoverFillStyle
 
-        self.roundingPercentage       = roundingPercentage
-        self.padding                  = padding
+        self.roundingPercentage         = roundingPercentage
+        self.padding                    = padding
 
-        self.normalCursorStyle        = normalCursorStyle
-        self.hoverCursorStyle         = hoverCursorStyle
+        self.normalCursorStyle          = normalCursorStyle
+        self.hoverCursorStyle           = hoverCursorStyle
 
         self.labelsDisplayEnclosingRect = labelsDisplayEnclosingRect
     }
 
     internal var _font : String {
-        return font ?? Self.theme.font(for:controlType)
+        return font ?? Self.theme.font(for:type)
     }
 
     internal var _textFillMode : FillMode {
-        return textFillMode ?? Self.theme.textFillMode(for:controlType)
+        return textFillMode ?? Self.theme.textFillMode(for:type)
     }
 
     internal var _textStrokeStyle : StrokeStyle {
-        return textStrokeStyle ?? Self.theme.textStrokeStyle(for:controlType)
+        return textStrokeStyle ?? Self.theme.textStrokeStyle(for:type)
     }
 
     internal var _textFillStyle : FillStyle {
-        return textFillStyle ?? Self.theme.textFillStyle(for:controlType)
+        return textFillStyle ?? Self.theme.textFillStyle(for:type)
     }
 
     internal var _foregroundStrokeStyle : StrokeStyle {
-        return foregroundStrokeStyle ?? Self.theme.foregroundStrokeStyle(for:controlType)
+        return foregroundStrokeStyle ?? Self.theme.foregroundStrokeStyle(for:type)
     }
 
     internal var _backgroundFillStyle : FillStyle {
-        return backgroundFillStyle ?? Self.theme.backgroundFillStyle(for:controlType)
+        return backgroundFillStyle ?? Self.theme.backgroundFillStyle(for:type)
     }
 
     internal var _backgroundHoverFillStyle : FillStyle {
-        return backgroundHoverFillStyle ?? Self.theme.backgroundHoverFillStyle(for:controlType)
+        return backgroundHoverFillStyle ?? Self.theme.backgroundHoverFillStyle(for:type)
     }
 
     internal var _roundingPercentage : Double {
-        return roundingPercentage ?? Self.theme.roundingPercentage(for:controlType)
+        return roundingPercentage ?? Self.theme.roundingPercentage(for:type)
     }
 
     internal var _padding : Int {
-        return padding ?? Self.theme.padding(for:controlType)
+        return padding ?? Self.theme.padding(for:type)
     }
 
     internal var _normalCursorStyle : CursorStyle.Style {
-        return normalCursorStyle ?? Self.theme.normalCursorStyle(for:controlType)
+        return normalCursorStyle ?? Self.theme.normalCursorStyle(for:type)
     }
 
     internal var _hoverCursorStyle : CursorStyle.Style {
-        return hoverCursorStyle ?? Self.theme.hoverCursorStyle(for:controlType)
+        return hoverCursorStyle ?? Self.theme.hoverCursorStyle(for:type)
     }
 
     internal var _labelsDisplayEnclosingRect : Bool {
-        return labelsDisplayEnclosingRect ?? Self.theme.labelsDisplayEnclosingRect(for:controlType)
+        return labelsDisplayEnclosingRect ?? Self.theme.labelsDisplayEnclosingRect(for:type)
     }
 }

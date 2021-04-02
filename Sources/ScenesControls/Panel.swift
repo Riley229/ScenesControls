@@ -20,7 +20,7 @@ import Scenes
 /// This class provides a rendered container for controls,
 /// visually grouping them together and providing the ability
 /// to easily reposition and layout the controls.
-public class Panel : RenderableEntityContainer {
+public class Panel : RenderableEntityContainer, Stylable {
 
     /// Determines the `LayoutStyle` to be used for this panel
     public enum LayoutStyle {
@@ -50,7 +50,7 @@ public class Panel : RenderableEntityContainer {
         super.init(name:name, 
                    topLeft:topLeft, fixedSize:fixedSize)
 
-        self.controlStyle.controlType = type(of:self)
+        self.controlStyle.type = type(of:self)
     }
 
     /// Recalculates the size of this panel using the specified layout

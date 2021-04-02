@@ -22,7 +22,7 @@ import Scenes
 /// 1. Handles EntityMouseEnter/EntityMouseLeave by setting *isMouseOver*
 /// 2. Handles EntityMouseDown/MouseUp by setting *isMouseDown*
 /// 3. Handles EntityMouseClick by relaying click to handler (if specified)
-public class Control : ContainableRenderableEntity,
+public class Control : ContainableRenderableEntity, Stylable,
                        EntityMouseEnterHandler, EntityMouseLeaveHandler,
                        EntityMouseDownHandler, MouseUpHandler,
                        EntityMouseClickHandler
@@ -64,8 +64,8 @@ public class Control : ContainableRenderableEntity,
         self.cursorStyle = controlStyle._normalCursorStyle
         super.init(name:name, 
                    topLeft:topLeft, fixedSize:fixedSize)
-
-        self.controlStyle.controlType = type(of:self)
+        
+        self.controlStyle.type = type(of:self)
     }
 
 
